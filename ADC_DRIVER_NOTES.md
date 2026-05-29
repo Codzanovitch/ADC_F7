@@ -5,7 +5,11 @@
 ## 1. Overview
 The STM32F7 ADC input clock is generated from the **PCLK2** clock divided by a prescaler. The maximum frequency must not exceed **14 MHz**.
 
-For a visual representation of the ADC architecture, refer to the [ADC Block Diagram](./docs/images/ADC_BLOCK%20DIAGRAM.vsdm).
+### ADC Block Diagram
+![ADC Block Diagram](./docs/images/Blank%20board.png)
+*Visual representation of the ADC architecture. See also the [original VSDM diagram](./docs/images/ADC_BLOCK%20DIAGRAM.vsdm).*
+
+---
 
 ## 2. Power Control
 The ADC is managed via the **ADON** bit in the `ADC_CR2` register:
@@ -15,20 +19,46 @@ The ADC is managed via the **ADON** bit in the `ADC_CR2` register:
 
 ## 3. Clock Configuration
 The ADC utilizes two distinct clocks:
-
 - **Analog Circuitry Clock (ADCCLK):** Common to all ADCs. This clock is generated from the **APB2** clock divided by a programmable prescaler (`/2`, `/4`, `/6`, or `/8`). Refer to the datasheets for the maximum value of **ADCCLK**.
 - **Digital Interface Clock:** Used for register read/write access. This clock is equal to the **APB2** clock. It can be enabled or disabled individually for each ADC through the `RCC_APB2ENR` (RCC APB2 peripheral clock enable register).
-(RCC_APB2ENR).
-## What we will use
-1.	12 bit resolution
-2.	Single mode
 
-# CHANNEL SELECTION
-There are 16 multiplexed channels. It is possible to organize the conversions in two groups: regular and injected. A group consists of a sequence of conversions that can be done on any channel and in any order. For instance, it is possible to implement the conversion sequence in the following order: ADC_IN3, ADC_IN8, ADC_IN2, ADC_IN2, ADC_IN0, ADC_IN2, ADC_IN2, ADC_IN15. • A regular group is composed of up to 16 conversions. The regular channels and their order in the conversion sequence must be selected in the ADC_SQRx registers. The total number of conversions in the regular group must be written in the L[3:0] bits in the ADC_SQR1 register.
-Single conversion mode In Single conversion mode the ADC does one conversion. This mode is started with the CONT bit at 0 by either: • setting the SWSTART bit in the ADC_CR2 register (for a regular channel only) • setting the JSWSTART bit (for an injected channel) • external trigger (for a regular or injected channel) Once the conversion of the selected channel is complete: • If a regular channel was converted: – The converted data are stored into the 16-bit ADC_DR register – The EOC (end of conversion) flag is set – An interrupt is generated if the EOCIE bit is set • If an injected channel was converted: – The converted data are stored into the 16-bit ADC_JDR1 register – The JEOC (end of conversion injected) flag is set – An interrupt is generated if the JEOCIE bit is set Then the ADC stops.
+---
 
+## 4. Configuration Requirements
+For our driver implementation, we will use the following settings:
+1. **12-bit Resolution**
+2. **Single Mode**
 
+---
 
+## 5. Channel Selection
+There are **16 multiplexed channels**. Conversions can be organized into two groups:
+- **Regular Group:** Up to 16 conversions. The sequence and order are defined in the `ADC_SQRx` registers. The total number of conversions must be specified in the **L[3:0]** bits of `ADC_SQR1`.
+- **Injected Group:** Used for higher-priority conversions.
+
+A sequence can include any channel in any order (e.g., `ADC_IN3`, `ADC_IN8`, `ADC_IN2`, `ADC_IN2`, `ADC_IN0`).
+
+---
+
+## 6. Single Conversion Mode
+In **Single Conversion Mode**, the ADC performs one conversion and then stops. This mode is active when the **CONT** bit is set to `0`.
+
+### Execution
+It can be triggered by:
+- Setting the **SWSTART** bit in the `ADC_CR2` register (Regular channels).
+- Setting the **JSWSTART** bit (Injected channels).
+- External triggers.
+
+### Completion
+Once the conversion is finished:
+- **Regular Channels:**
+  - Data is stored in the 16-bit `ADC_DR` register.
+  - The **EOC** (End of Conversion) flag is set.
+  - An interrupt is generated if **EOCIE** is enabled.
+- **Injected Channels:**
+  - Data is stored in the 16-bit `ADC_JDR1` register.
+  - The **JEOC** (End of Conversion Injected) flag is set.
+  - An interrupt is generated if **JEOCIE** is enabled.
 
 ---
 
