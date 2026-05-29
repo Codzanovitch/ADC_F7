@@ -6,7 +6,7 @@
 The STM32F7 ADC input clock is generated from the **PCLK2** clock divided by a prescaler. The maximum frequency must not exceed **14 MHz**.
 
 ### ADC Block Diagram
-![ADC Block Diagram](./docs/images/Blank%20board.png)
+![ADC Block Diagram]('./docs/images/block diagram.png')
 *Visual representation of the ADC architecture. See also the [original VSDM diagram](./docs/images/ADC_BLOCK%20DIAGRAM.vsdm).*
 
 ---
