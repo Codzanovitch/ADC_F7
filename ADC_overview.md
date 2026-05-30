@@ -37,7 +37,7 @@ The ADC uses two clocks:
 ![Single ADC block diagram](./docs/images/adc_funcional_bock_diagram.png)
 *Figure 1: Single ADC Block Diagram*
 
-![ADC pins](./docs/images/adc_pins.png.png)
+![ADC pins](./docs/images/adc_pins.png)
 *Figure 2: ADC Pin Description*
 
 ### Describing the Block Diagram
