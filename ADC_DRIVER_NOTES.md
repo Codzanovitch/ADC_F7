@@ -27,9 +27,20 @@ The ADC utilizes two distinct clocks:
 There are 16 multiplexed channels. It is possible to organize the conversions in two groups: regular and injected. A group consists of a sequence of conversions that can be done on any channel and in any order. For instance, it is possible to implement the conversion sequence in the following order: ADC_IN3, ADC_IN8, ADC_IN2, ADC_IN2, ADC_IN0, ADC_IN2, ADC_IN2, ADC_IN15. • A regular group is composed of up to 16 conversions. The regular channels and their order in the conversion sequence must be selected in the ADC_SQRx registers. The total number of conversions in the regular group must be written in the L[3:0] bits in the ADC_SQR1 register.
 Single conversion mode In Single conversion mode the ADC does one conversion. This mode is started with the CONT bit at 0 by either: • setting the SWSTART bit in the ADC_CR2 register (for a regular channel only) • setting the **JSWSTART** bit (for an injected channel) • external trigger (for a regular or injected channel) Once the conversion of the selected channel is complete: • If a regular channel was converted: – The converted data are stored into the 16-bit ADC_DR register – The EOC (end of conversion) flag is set – An interrupt is generated if the EOCIE bit is set • If an injected channel was converted: – The converted data are stored into the 16-bit ADC_JDR1 register – The JEOC (end of conversion injected) flag is set – An interrupt is generated if the JEOCIE bit is set Then the ADC stops.
 ### INITIALIZATION
+## SINGLE MODE
+In Single conversion mode the ADC does one conversion. This mode is started with the
+CONT bit at 0 by either:
+• setting the SWSTART bit in the ADC_CR2 register (for a regular channel only)
+Once the conversion of the selected channel is complete:
+• If a regular channel was converted:
+– The converted data are stored into the 16-bit ADC_DR register
+– The EOC (end of conversion) flag is set
+– An interrupt is generated if the EOCIE bit is set
+
+## CLOCK 
 
 ## DATA ALIGNMENT
-The ALIGN bit in ADC_CR2 determines if the data will be right aligned of left aligned. In this case the data will be right aligned.
+•The ALIGN bit in ADC_CR2 determines if the data will be right aligned of left aligned. In this case the data will be right aligned.
 
 ## ADC_SAMPLING
 The ADC samples for for a selected number of ADCCLK cycles. It can be selected for it to sample after 3 clock cycles or 15 clock cycles etc.
@@ -38,7 +49,8 @@ ADC can be made faster by reducing the resolution. The **RES** bit are used to s
 12 bit Tconv= sampling time + 15cycles.
 10 bit Tconv= sampling time + 13cycles
 ## 
-
+The temperature sensor, VREFINT and the VBAT channel are available only on the master
+ADC1 peripheral.
 
 
 
