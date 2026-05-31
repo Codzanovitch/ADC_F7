@@ -41,7 +41,7 @@ A sequence can include any channel in any order (e.g., `ADC_IN3`, `ADC_IN8`, `AD
 ---
 
 ## 6. Single Conversion Mode
-In **Single Conversion Mode**, the ADC performs one conversion and then stops. This mode is active when the **CONT** bit is set to `0`.
+In **Single Conversion Mode**, the ADC performs one conversion and then stops. This mode is active when the **CONT** bit is clear to `0`.
 
 ### Execution
 It can be triggered by:
